@@ -18,11 +18,13 @@ public class AiPlayer : MonoBehaviour
     private bool isAttacking = false;
     private enum State { Idle, Running, Jumping, Falling }
     private State state = State.Idle;
+    Bow bow;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        bow = GetComponentInChildren<Bow>();
     }
     void Update()
     {
@@ -47,12 +49,13 @@ public class AiPlayer : MonoBehaviour
                 }
             }
 
-            RaycastHit2D enemyHit = Physics2D.Raycast(transform.position, Vector2.right * direction, enemyDistance, enemyLayer);
+            RaycastHit2D enemyHit = Physics2D.CircleCast(transform.position, enemyDistance, Vector2.zero, 0, enemyLayer);
             if (enemyHit.collider != null)
             {
+                Debug.Log("enemyHit.collider:" + enemyHit.collider.name);
                 if (!isAttacking)
                 {
-                    Attack();
+                    Attack(enemyHit.transform.position);
                 }
             }
             else
@@ -87,9 +90,10 @@ public class AiPlayer : MonoBehaviour
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    void Attack()
+    void Attack(Vector3 EnemyPos)
     {
         isAttacking = true;
+        bow.Shoot(EnemyPos);
         rb.velocity = Vector2.zero;
     }
 
