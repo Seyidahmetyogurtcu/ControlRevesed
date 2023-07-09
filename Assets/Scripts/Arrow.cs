@@ -19,16 +19,18 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+
+
+    private void OnTriggerEnter(Collider other)
     {
         hasHit = true;              //if (arrow) hits an object
                                     //rb.isKinematic = true;
 
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
-        if (collision.gameObject.GetComponent<EnemyHealth>() != null)
+        if (other.gameObject.GetComponent<EnemyHealth>() != null)
         {
-            collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(arrowDamage);
+            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(arrowDamage);
             Destroy(this.gameObject);
         }
         if (this.gameObject != null)
