@@ -16,6 +16,8 @@ public class AiPlayer : MonoBehaviour
     private int direction = 1;
     private bool isGrounded = false;
     private bool isAttacking = false;
+    private enum State { Idle, Running, Jumping, Falling }
+    private State state = State.Idle;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -24,47 +26,54 @@ public class AiPlayer : MonoBehaviour
     }
     void Update()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundDistance, groundLayer);
-        if (hit.collider != null)
+        if (state == State.Running)
         {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
-
-        RaycastHit2D obstacleHit = Physics2D.Raycast(transform.position, Vector2.right * direction, obstacleDistance, obstacleLayer);
-        if (obstacleHit.collider != null)
-        {
-            if (isGrounded)
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, groundDistance, groundLayer);
+            if (hit.collider != null)
             {
-                Jump();
+                isGrounded = true;
             }
-        }
-
-        RaycastHit2D enemyHit = Physics2D.Raycast(transform.position, Vector2.right * direction, enemyDistance, enemyLayer);
-        if (enemyHit.collider != null)
-        {
-            if (!isAttacking)
+            else
             {
-                Attack();
+                isGrounded = false;
             }
-        }
-        else
-        {
-            if (isAttacking)
+
+            RaycastHit2D obstacleHit = Physics2D.Raycast(transform.position, Vector2.right * direction, obstacleDistance, obstacleLayer);
+            if (obstacleHit.collider != null)
             {
-                StopAttack();
+                if (isGrounded)
+                {
+                    Jump();
+                }
             }
-            Move();
+
+            RaycastHit2D enemyHit = Physics2D.Raycast(transform.position, Vector2.right * direction, enemyDistance, enemyLayer);
+            if (enemyHit.collider != null)
+            {
+                if (!isAttacking)
+                {
+                    Attack();
+                }
+            }
+            else
+            {
+                if (isAttacking)
+                {
+                    StopAttack();
+                }
+                Move();
+            }
+
+            Debug.Log("isGrounded:" + isGrounded + "\nisAttacking:" + isAttacking + "\nspeed:" + speed);
+            anim.SetBool("isGrounded", isGrounded);
+            anim.SetBool("isAttacking", isAttacking);
+            anim.SetFloat("speed", Mathf.Abs(rb.velocity.x));
         }
 
-        Debug.Log("isGrounded:" + isGrounded + "\nisAttacking:" + isAttacking + "\nspeed:" + speed);
-        anim.SetBool("isGrounded", isGrounded);
-        anim.SetBool("isAttacking", isAttacking);
-        anim.SetFloat("speed", Mathf.Abs(rb.velocity.x));
-
+    }
+    public void StartGame()
+    {
+        state = State.Running;
     }
 
     void Move()
