@@ -16,6 +16,8 @@ public class AiPlayer : MonoBehaviour
     private int direction = 1;
     private bool isGrounded = false;
     private bool isAttacking = false;
+    float delay = 0.2f;
+    float nextAtackTime = 0;
     private enum State { Idle, Running, Jumping, Falling }
     private State state = State.Idle;
     Bow bow;
@@ -52,9 +54,12 @@ public class AiPlayer : MonoBehaviour
             RaycastHit2D enemyHit = Physics2D.CircleCast(transform.position, enemyDistance, Vector2.zero, 0, enemyLayer);
             if (enemyHit.collider != null)
             {
+
                 Debug.Log("enemyHit.collider:" + enemyHit.collider.name);
-                if (!isAttacking)
+                if (Time.time > nextAtackTime && !isAttacking)
                 {
+                    isAttacking = true;
+                    nextAtackTime = Time.time + delay;
                     Attack(enemyHit.transform.position);
                 }
             }
@@ -92,9 +97,9 @@ public class AiPlayer : MonoBehaviour
 
     void Attack(Vector3 EnemyPos)
     {
-        isAttacking = true;
         bow.Shoot(EnemyPos);
         rb.velocity = Vector2.zero;
+        StopAttack();
     }
 
     void StopAttack()
