@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    float delay = 0.2f;
+    float delay = 0.5f;
     float nextAtackTime = 0;
     private float playerDistance = 6;
     public LayerMask playerLayer;
@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour
         RaycastHit2D playerHit = Physics2D.CircleCast(transform.position, playerDistance, Vector2.zero, 0, playerLayer);
         if (playerHit.collider != null)
         {
-
-            Debug.Log("Player.collider:" + playerHit.collider.name);
             if (Time.time > nextAtackTime && !isAttacking)
             {
                 isAttacking = true;

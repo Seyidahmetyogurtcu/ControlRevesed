@@ -23,14 +23,11 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        hasHit = true;              //if (arrow) hits an object
-                                    //rb.isKinematic = true;
+        hasHit = true;
 
-        rb.velocity = Vector2.zero;
-        rb.gravityScale = 0f;
-        if (other.gameObject.GetComponent<EnemyHealth>() != null)
+        if (other.gameObject.GetComponent<Health>() != null)
         {
-            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(arrowDamage);
+            other.gameObject.GetComponent<Health>().TakeDamage(arrowDamage);
             Destroy(this.gameObject);
         }
         if (this.gameObject != null)

@@ -1,10 +1,8 @@
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class Health : MonoBehaviour
 {
     public int health = 500;
-    //public GameObject deathEffect;
-    public bool isEnraged = false;
 
     public void TakeDamage(int damage)
     {
@@ -18,7 +16,6 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        //Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

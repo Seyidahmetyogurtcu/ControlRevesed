@@ -10,7 +10,6 @@ public class Bow : MonoBehaviour
     #endregion
 
     #region private variables
-    //AudioSource bowSound;
     Vector2 direction;
     GameObject allArrows;
     readonly private float minLaunchForce = 4f;  //read only(salt okunur) yalnıca değer başka değere atanır(okunur),
@@ -40,6 +39,5 @@ public class Bow : MonoBehaviour
         {
             Destroy(newarrow, 10f);
         }
-        //bowSound.Play();
     }
 }
